@@ -3,5 +3,14 @@
   <body>
     <%- include("./partials/header.ejs") %>
     <p>I am the add page</p>
+    <form action="/monster-mash/add" method="POST">
+      Name: <input type="text" name="name" />
+      <br />
+      Location: <input type="text" name="location" />
+      <br />
+      Hobby: <input type="text" name="hobby" />
+      <br />
+      <input type="submit" value="Add monster" />
+    </form>
   </body>
 </html>

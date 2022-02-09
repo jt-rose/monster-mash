@@ -1,5 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
+const mongoose = require("mongoose");
+const Monster = require("./models/Monster");
 
 const main = async () => {
   // initialize app
@@ -9,6 +11,10 @@ const main = async () => {
   app.use(express.static("public"));
   app.use(methodOverride("_method"));
   app.use(express.urlencoded({ extended: true }));
+
+  // connect to Mongoose
+  await mongoose.connect("mongodb://localhost:27017/monster-mash");
+  console.log("connected to mongoose");
 
   /* -------------------------------------------------------------------------- */
   /*                                set up routes                               */
@@ -43,17 +49,18 @@ const main = async () => {
   });
 
   // POST - add new monster
-  app.post("/monster-mash", (req, res) => {
+  app.post("/monster-mash/add", async (req, res) => {
+    await new Monster(req.body).save();
     res.redirect("/monster-mash");
   });
 
   // PUT - update monster
-  app.put("/monster-mash", (req, res) => {
+  app.put("/monster-mash/update", (req, res) => {
     res.redirect("/monster-mash");
   });
 
   // DELETE - remove monster
-  app.delete("/monster-mash", (req, res) => {
+  app.delete("/monster-mash/delete", (req, res) => {
     res.redirect("/monster-mash");
   });
 
