@@ -37,9 +37,12 @@ const main = async () => {
   });
 
   // GET - show individual monster
-  app.get("/monster-mash/:monsterid", (req, res) => {
+  app.get("/monster-mash/:monsterid", async (req, res) => {
+    const id = req.params.monsterid;
+    const monster = await Monster.findById(id);
     res.render("show.ejs", {
       title: "Show Monster",
+      monster,
     });
   });
 
