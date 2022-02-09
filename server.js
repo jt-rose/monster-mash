@@ -21,9 +21,11 @@ const main = async () => {
   /* -------------------------------------------------------------------------- */
 
   // GET - show all monsters
-  app.get("/monster-mash", (req, res) => {
+  app.get("/monster-mash", async (req, res) => {
+    const monsters = await Monster.find();
     res.render("index.ejs", {
       title: "Monster Mash",
+      monsters,
     });
   });
 

@@ -3,5 +3,12 @@
   <body>
     <%- include("./partials/header.ejs") %>
     <p>I am the index page</p>
+    <ul>
+      <% for (let i = 0; i < monsters.length; i++) { %>
+      <li>
+        <a href="/monster-mash/<%=monsters[i]._id%>"><%=monsters[i].name%></a>
+      </li>
+      <% } %>
+    </ul>
   </body>
 </html>
