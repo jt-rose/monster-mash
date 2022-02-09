@@ -1,12 +1,12 @@
 <html>
   <%- include("./partials/head.ejs") %>
   <body>
-    <div class="container text-center">
+    <div class="container-sm text-center">
       <%- include("./partials/header.ejs") %>
       <p>I am the index page</p>
-      <ul class="nav">
+      <ul class="row nav">
         <% for (let i = 0; i < monsters.length; i++) { %>
-        <li class="nav-item">
+        <li class="col-sm nav-item">
           <a href="/monster-mash/<%=monsters[i]._id%>" class="nav-link"
             ><%=monsters[i].name%></a
           >
