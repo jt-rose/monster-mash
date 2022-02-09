@@ -1,27 +1,33 @@
 <html>
   <%- include("./partials/head.ejs") %>
   <body>
-    <%- include("./partials/header.ejs") %>
-    <p>I am the index page</p>
-    <ul>
-      <% for (let i = 0; i < monsters.length; i++) { %>
-      <li>
-        <a href="/monster-mash/<%=monsters[i]._id%>"><%=monsters[i].name%></a>
-        <div>
-          <a href="/monster-mash/edit/<%=monsters[i]._id%>"
-            ><button>Edit</button></a
+    <div class="container text-center">
+      <%- include("./partials/header.ejs") %>
+      <p>I am the index page</p>
+      <ul class="nav">
+        <% for (let i = 0; i < monsters.length; i++) { %>
+        <li class="nav-item">
+          <a href="/monster-mash/<%=monsters[i]._id%>" class="nav-link"
+            ><%=monsters[i].name%></a
           >
-          <form
-            action="/monster-mash/<%=monsters[i]._id%>?_method=DELETE"
-            method="post"
-          >
-            <button type="submit">Delete</button>
-          </form>
-        </div>
-      </li>
-      <% } %>
-    </ul>
-    <br />
-    <a href="/monster-mash/add">Add New monster</a>
+          <div>
+            <a href="/monster-mash/edit/<%=monsters[i]._id%>"
+              ><button class="btn btn-primary">Edit</button></a
+            >
+            <form
+              action="/monster-mash/<%=monsters[i]._id%>?_method=DELETE"
+              method="post"
+            >
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </li>
+        <% } %>
+      </ul>
+      <br />
+      <a href="/monster-mash/add"
+        ><button class="btn btn-primary btn-large">Add New monster</button>
+      </a>
+    </div>
   </body>
 </html>
