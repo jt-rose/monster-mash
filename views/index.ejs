@@ -7,6 +7,17 @@
       <% for (let i = 0; i < monsters.length; i++) { %>
       <li>
         <a href="/monster-mash/<%=monsters[i]._id%>"><%=monsters[i].name%></a>
+        <div>
+          <a href="/monster-mash/edit/<%=monsters[i]._id%>"
+            ><button>Edit</button></a
+          >
+          <form
+            action="/monster-mash/<%=monsters[i]._id%>?_method=DELETE"
+            method="post"
+          >
+            <button type="submit">Delete</button>
+          </form>
+        </div>
       </li>
       <% } %>
     </ul>

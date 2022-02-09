@@ -47,9 +47,12 @@ const main = async () => {
   });
 
   // GET - show monster edit form
-  app.get("/monster-mash/edit/:monsterid", (req, res) => {
+  app.get("/monster-mash/edit/:monsterid", async (req, res) => {
+    const id = req.params.monsterid;
+    const monster = await Monster.findById(id);
     res.render("edit.ejs", {
       title: "Edit Monster",
+      monster,
     });
   });
 
@@ -59,13 +62,17 @@ const main = async () => {
     res.redirect("/monster-mash");
   });
 
-  // PUT - update monster
-  app.put("/monster-mash/update", (req, res) => {
+  // PUT - edit monster
+  app.put("/monster-mash/edit/:monsterid", async (req, res) => {
+    const id = req.params.monsterid;
+    await Monster.findByIdAndUpdate(id, req.body);
     res.redirect("/monster-mash");
   });
 
   // DELETE - remove monster
-  app.delete("/monster-mash/delete", (req, res) => {
+  app.delete("/monster-mash/:monsterid", async (req, res) => {
+    const id = req.params.monsterid;
+    await Monster.findByIdAndDelete(id);
     res.redirect("/monster-mash");
   });
 

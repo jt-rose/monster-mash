@@ -3,5 +3,18 @@
   <body>
     <%- include("./partials/header.ejs") %>
     <p>I am the edit page</p>
+    <form
+      action="/monster-mash/edit/<%=monster._id%>?_method=PUT"
+      method="POST"
+    >
+      Name: <input type="text" name="name" value="<%=monster.name%>" />
+      <br />
+      Location:
+      <input type="text" name="location" value="<%=monster.location%>" />
+      <br />
+      Hobby: <input type="text" name="hobby" value="<%=monster.hobby%>" />
+      <br />
+      <input type="submit" value="Edit monster" />
+    </form>
   </body>
 </html>
