@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
@@ -93,24 +95,6 @@ router.delete("/logout", async (req, res) => {
 
 // POST - forgot password link set up
 router.post("/forgot-password/:username", async (req, res) => {
-  const user = await User.findOne({ where: { email } });
-  if (!user) {
-    // no email in database - don't tell user
-    return true;
-  }
-
-  const genId = v4();
-  console.log("key: " + FORGET_PASSWORD_PREFIX + genId);
-  await redis.set(
-    FORGET_PASSWORD_PREFIX + token,
-    user.id,
-    "ex",
-    1000 * 60 * 60
-  );
-  // add prod origin when ready
-  const resetLink = `<a href="http://localhost:3000/change-password/${genId}">reset password</a>`;
-  await sendEmail(email, resetLink).catch((err) => console.error(err));
-
   // confirm valid username
   const foundUser = await User.find({ username: req.body.username });
   if (!foundUser) {
@@ -122,13 +106,28 @@ router.post("/forgot-password/:username", async (req, res) => {
   // generate unique token
   const genKey = await v4();
   const token = `RESET-PASSWORD-${genKey}-USERNAME-${req.body.username}`;
+  console.log(token);
 
   // store token in redis with expiration
+  await redis.set(
+    FORGET_PASSWORD_PREFIX + token,
+    user.id,
+    "ex",
+    1000 * 60 * 60
+  );
 
   // email user a reset password link that uses the token and username
+  const resetLink = `<a href="http://localhost:3000/change-password/${resetKey}">reset password</a>`;
+  await sendEmail(
+    email,
+    resetLink,
+    process.env.ETHEREAL_USER,
+    process.env.ETHEREAL_PASS
+  ).catch((err) => console.error(err));
 
   // redirect to page confirming password reset link sent
   res.redirect("/passwordReset");
+  // ! add error handling
 });
 
 // GET - show reset password page if token matches redis db
