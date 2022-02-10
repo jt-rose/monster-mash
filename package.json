@@ -10,9 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.28.4",
+    "connect-redis": "^6.1.1",
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "ioredis": "^4.28.5",
     "method-override": "^3.0.0",
-    "mongoose": "^6.2.1"
+    "mongoose": "^6.2.1",
+    "nodemailer": "^6.7.2",
+    "uuid": "^8.3.2"
   }
 }
