@@ -1,0 +1,38 @@
+<html>
+  <%- include("./partials/head.ejs") %>
+  <body>
+    <div class="container-sm text-center">
+      <%- include("./partials/header.ejs") %>
+      <p>I am the register page</p>
+      <form action="/auth/register" method="POST">
+        <div class="form-floating mb-3">
+          <label for="username" class="form-label">Userame</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">email</label
+          ><input type="email" name="email" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="passord" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <input
+            type="submit"
+            value="Sign Up"
+            class="btn btn-primary btn-large"
+          />
+        </div>
+      </form>
+      <br />
+      <a href="/monster-mash">Back</a>
+    </div>
+  </body>
+</html>
