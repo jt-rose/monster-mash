@@ -5,10 +5,11 @@
       <%- include("./partials/header.ejs") %>
       <p>I am the add page</p>
       <form action="/monster-mash/add" method="POST">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label
-          ><input type="text" name="name" class="form-control" />
+        <div class="form-floating mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" name="name" id="name" class="form-control" />
         </div>
+
         <div class="mb-3">
           <label for="location" class="form-label">Location</label
           ><input type="text" name="location" class="form-control" />
