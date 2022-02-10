@@ -1,80 +1,63 @@
+require("dotenv").config();
 const express = require("express");
 const methodOverride = require("method-override");
+const session = require("express-session");
+const Redis = require("ioredis");
+const connectRedis = require("connect-redis");
 const mongoose = require("mongoose");
-const Monster = require("./models/Monster");
+
+const crud = require("./controllers/crud");
+const auth = require("./controllers/auth");
 
 const main = async () => {
+  //   await sendEmail(
+  //     "jtr219@outlook.com",
+  //     "<h1>Hello<?h1>",
+  //     process.env.ETHEREAL_USER,
+  //     process.env.ETHEREAL_PASS
+  //   );
   // initialize app
   const app = express();
+
+  // connect to redis
+  const RedisStore = connectRedis(session);
+  const redis = new Redis(); // auto connect if running on localhost
 
   // set up middleware
   app.use(express.static("public"));
   app.use(methodOverride("_method"));
   app.use(express.urlencoded({ extended: true }));
+  // set up sessions
+  app.use(
+    session({
+      name: "cid",
+      store: new RedisStore({
+        client: redis,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false, // __PROD__, // disable for dev in localhost
+        // add domain when in prod
+      },
+      secret: process.env.COOKIE_SECRET,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
   // connect to Mongoose
   await mongoose.connect("mongodb://localhost:27017/monster-mash");
   console.log("connected to mongoose");
 
+  app.use("/auth", auth);
+  app.use("/monster-mash", crud);
+
   /* -------------------------------------------------------------------------- */
-  /*                                set up routes                               */
+  /*                                start server                                */
   /* -------------------------------------------------------------------------- */
-
-  // GET - show all monsters
-  app.get("/monster-mash", async (req, res) => {
-    const monsters = await Monster.find();
-    res.render("index.ejs", {
-      title: "Monster Mash",
-      monsters,
-    });
-  });
-
-  // GET - show monster add form
-  app.get("/monster-mash/add", (req, res) => {
-    res.render("add.ejs", {
-      title: "Add Monster",
-    });
-  });
-
-  // GET - show individual monster
-  app.get("/monster-mash/:monsterid", async (req, res) => {
-    const id = req.params.monsterid;
-    const monster = await Monster.findById(id);
-    res.render("show.ejs", {
-      title: "Show Monster",
-      monster,
-    });
-  });
-
-  // GET - show monster edit form
-  app.get("/monster-mash/edit/:monsterid", async (req, res) => {
-    const id = req.params.monsterid;
-    const monster = await Monster.findById(id);
-    res.render("edit.ejs", {
-      title: "Edit Monster",
-      monster,
-    });
-  });
-
-  // POST - add new monster
-  app.post("/monster-mash/add", async (req, res) => {
-    await new Monster(req.body).save();
-    res.redirect("/monster-mash");
-  });
-
-  // PUT - edit monster
-  app.put("/monster-mash/edit/:monsterid", async (req, res) => {
-    const id = req.params.monsterid;
-    await Monster.findByIdAndUpdate(id, req.body);
-    res.redirect("/monster-mash");
-  });
-
-  // DELETE - remove monster
-  app.delete("/monster-mash/:monsterid", async (req, res) => {
-    const id = req.params.monsterid;
-    await Monster.findByIdAndDelete(id);
-    res.redirect("/monster-mash");
-  });
 
   // start server
   app.listen(3000, () => {
