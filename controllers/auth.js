@@ -109,12 +109,7 @@ router.post("/forgot-password/:username", async (req, res) => {
   console.log(token);
 
   // store token in redis with expiration
-  await redis.set(
-    FORGET_PASSWORD_PREFIX + token,
-    user.id,
-    "ex",
-    1000 * 60 * 60
-  );
+  await redis.set(token, user.id, "ex", 1000 * 60 * 60);
 
   // email user a reset password link that uses the token and username
   const resetLink = `<a href="http://localhost:3000/change-password/${resetKey}">reset password</a>`;
